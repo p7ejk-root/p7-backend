@@ -11,11 +11,9 @@ const client = new Client({
     intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers]
 });
 
-// التوكن الخاص بك جاهز وفي سطر واحد متصل داخل علامتي التنصيص
-const TOKEN = 'MTU0ODU1NDgwMzc0NjA1NDE2NQ.GndIhs.8U0CtQaMXqHn21_uhk06UdwXNuH0D5dpwSTxtk';
-
-// آي دي السيرفر الخاص بك
-const GUILD_ID = '1095578118963486444';
+// سحب التوكن والآي دي من إعدادات سحابية آمنة
+const TOKEN = process.env.TOKEN;
+const GUILD_ID = process.env.GUILD_ID;
 
 app.post('/api/discord-ban', async (req, res) => {
     const { username, reason } = req.body;
