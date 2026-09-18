@@ -12,7 +12,7 @@ const client = new Client({
 });
 
 // ضع توكن البوت هنا بين علامتي التنصيص في سطر واحد فقط دون نزول لأسطر جديدة
-const TOKEN = 'MTU0ODU1NDgwMzc0NjA1NDE2NQ.GndIhs.8U0CtQaMXqHn21_uhk06UdwXNuH0D5dpwSTxtk';
+const TOKEN = MTU0ODU1NDgwMzc0NjA1NDE2NQ.GndIhs.8U0CtQaMXqHn21_uhk06UdwXNuH0D5dpwSTxtk 
 
 // آي دي السيرفر الخاص بك
 const GUILD_ID = '1095578118963486444';
