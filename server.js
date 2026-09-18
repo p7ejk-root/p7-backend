@@ -12,9 +12,9 @@ const client = new Client({
 });
 
 // ضع هنا توكن بوت الديسكورد الخاص بك
-const TOKEN = 'YOUR_BOT_TOKEN_HERE';
+const TOKEN = 'MTU0ODU1NDgwMzc0NjA1NDE2NQ.GndIhs.8U0CtQaMXqHn21_uhk06UdwXNuH0D5dpwSTxtk';
 // ضع هنا آيدي سيرفر الديسكورد الخاص بك
-const GUILD_ID = 'YOUR_SERVER_ID_HERE';
+const GUILD_ID = '1095578118963605644';
 
 app.post('/api/discord-ban', async (req, res) => {
     const { username, reason } = req.body;
