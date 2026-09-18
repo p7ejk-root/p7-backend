@@ -11,10 +11,11 @@ const client = new Client({
     intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers]
 });
 
-// ضع هنا توكن بوت الديسكورد الخاص بك
+// ضع توكن البوت هنا بين علامتي التنصيص في سطر واحد فقط دون نزول لأسطر جديدة
 const TOKEN = 'MTU0ODU1NDgwMzc0NjA1NDE2NQ.GndIhs.8U0CtQaMXqHn21_uhk06UdwXNuH0D5dpwSTxtk';
-// ضع هنا آيدي سيرفر الديسكورد الخاص بك
-const GUILD_ID = '1095578118963605644';
+
+// آي دي السيرفر الخاص بك
+const GUILD_ID = '1095578118963486444';
 
 app.post('/api/discord-ban', async (req, res) => {
     const { username, reason } = req.body;
@@ -22,13 +23,13 @@ app.post('/api/discord-ban', async (req, res) => {
         const guild = await client.guilds.fetch(GUILD_ID);
         await guild.members.fetch();
         const member = guild.members.cache.find(m => m.user.username.toLowerCase() === username.toLowerCase());
-        
+
         if (!member) {
             return res.status(404).send({ success: false, message: 'العضو غير موجود في سيرفر الديسكورد' });
         }
 
         await member.ban({ reason: reason || 'باند رسمي من الموقع' });
-        res.status(200).send({ success: true, message: 'تم تبنيد العضو في الديسكورد بنجاح' });
+        res.status(200).send({ success: true, message: 'تم بنجاح حظر العضو من الديسكورد' });
     } catch (error) {
         res.status(500).send({ success: false, error: error.message });
     }
@@ -39,4 +40,7 @@ client.once('ready', () => {
 });
 
 client.login(TOKEN);
-app.listen(3000, () => console.log('P7 Backend running on port 3000'));
+
+app.listen(3000, () => {
+    console.log('P7 Backend running on port 3000');
+});
