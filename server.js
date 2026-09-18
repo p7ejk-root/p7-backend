@@ -11,8 +11,8 @@ const client = new Client({
     intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers]
 });
 
-// التوكن بداخل علامتي التنصيص المفردة بشكل صحيح
-const TOKEN = 'MTU0ODU1NDgwMzc0NjA1NDE2NS.8UOCTqAmXGhqN21_uhk06UdWxNHO05dpw5Txtk';
+// التوكن الخاص بك جاهز وفي سطر واحد متصل داخل علامتي التنصيص
+const TOKEN = 'MTU0ODU1NDgwMzc0NjA1NDE2NQ.GndIhs.8U0CtQaMXqHn21_uhk06UdwXNuH0D5dpwSTxtk';
 
 // آي دي السيرفر الخاص بك
 const GUILD_ID = '1095578118963486444';
