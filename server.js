@@ -33,6 +33,26 @@ app.post('/api/discord-ban', async (req, res) => {
     }
 });
 
+// فك الباند: العضو المحظور مو موجود في guild.members (لأنه مطرود)،
+// فلازم نجيبه من قائمة المحظورين نفسها (guild.bans) مو من الأعضاء
+app.post('/api/discord-unban', async (req, res) => {
+    const { username, reason } = req.body;
+    try {
+        const guild = await client.guilds.fetch(GUILD_ID);
+        const bans = await guild.bans.fetch();
+        const bannedEntry = bans.find(b => b.user.username.toLowerCase() === username.toLowerCase());
+
+        if (!bannedEntry) {
+            return res.status(404).send({ success: false, message: 'العضو غير موجود في قائمة المحظورين بديسكورد' });
+        }
+
+        await guild.members.unban(bannedEntry.user.id, reason || 'فك باند رسمي من الموقع');
+        res.status(200).send({ success: true, message: 'تم بنجاح فك حظر العضو من الديسكورد' });
+    } catch (error) {
+        res.status(500).send({ success: false, error: error.message });
+    }
+});
+
 client.once('ready', () => {
     console.log(`Bot connected as ${client.user.tag}`);
 });
