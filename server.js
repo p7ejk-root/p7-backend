@@ -100,6 +100,32 @@ app.post('/api/discord-unban', async (req, res) => {
     }
 });
 
+// نقطة فحص سريعة: افتحها بالمتصفح مباشرة (BACKEND_URL/api/debug-members)
+// عشان تعرف هل البوت فعلاً يقدر يجيب أعضاء السيرفر أو لا (يكشف مشكلة الـ Intent فوراً)
+app.get('/api/debug-members', async (req, res) => {
+    try {
+        const guild = await client.guilds.fetch(GUILD_ID);
+        await guild.members.fetch();
+        const sample = guild.members.cache.first(10).map(m => ({
+            username: m.user.username,
+            globalName: m.user.globalName,
+            nickname: m.nickname
+        }));
+        res.send({
+            success: true,
+            guildName: guild.name,
+            totalMembersReportedByDiscord: guild.memberCount,
+            totalMembersFetchedByBot: guild.members.cache.size,
+            note: guild.members.cache.size <= 1
+                ? 'البوت جاب نفسه بس! لازم تفعّل SERVER MEMBERS INTENT من Discord Developer Portal → Bot → Privileged Gateway Intents'
+                : 'البوت شغال تمام ويقدر يجيب الأعضاء',
+            sampleMembers: sample
+        });
+    } catch (error) {
+        res.status(500).send({ success: false, error: error.message });
+    }
+});
+
 client.once('ready', () => {
     console.log(`Bot connected as ${client.user.tag}`);
 });
