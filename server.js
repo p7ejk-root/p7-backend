@@ -62,10 +62,20 @@ app.post('/api/discord-ban', async (req, res) => {
             });
         }
 
+        if (!member.bannable) {
+            return res.status(403).send({
+                success: false,
+                message: 'البوت ما يقدر يحظر هذا العضو. لازم رتبة البوت تكون أعلى من رتبة الشخص المستهدف في ترتيب الرتب بإعدادات السيرفر (Server Settings → Roles)، وتأكد إن صلاحية Ban Members مفعّلة لرتبة البوت.'
+            });
+        }
+
         await member.ban({ reason: reason || 'باند رسمي من الموقع' });
         res.status(200).send({ success: true, message: 'تم بنجاح حظر العضو من الديسكورد' });
     } catch (error) {
         console.error('discord-ban error:', error);
+        if (error.code === 50013) {
+            return res.status(403).send({ success: false, message: 'البوت ما عنده صلاحية كافية (Missing Permissions). تأكد من صلاحية Ban Members ومن ترتيب رتبة البوت.' });
+        }
         res.status(500).send({ success: false, error: error.message });
     }
 });
@@ -106,6 +116,7 @@ app.get('/api/debug-members', async (req, res) => {
     try {
         const guild = await client.guilds.fetch(GUILD_ID);
         await guild.members.fetch();
+        const botMember = await guild.members.fetchMe();
         const sample = guild.members.cache.first(10).map(m => ({
             username: m.user.username,
             globalName: m.user.globalName,
@@ -119,6 +130,12 @@ app.get('/api/debug-members', async (req, res) => {
             note: guild.members.cache.size <= 1
                 ? 'البوت جاب نفسه بس! لازم تفعّل SERVER MEMBERS INTENT من Discord Developer Portal → Bot → Privileged Gateway Intents'
                 : 'البوت شغال تمام ويقدر يجيب الأعضاء',
+            botHasBanPermission: botMember.permissions.has('BanMembers'),
+            botHighestRolePosition: botMember.roles.highest.position,
+            botHighestRoleName: botMember.roles.highest.name,
+            permissionNote: !botMember.permissions.has('BanMembers')
+                ? 'البوت ما عنده صلاحية Ban Members أصلاً! فعّلها من Server Settings → Roles → رتبة البوت'
+                : 'البوت عنده صلاحية Ban Members. لو الحظر لسا ما يشتغل، تأكد إن رتبة البوت أعلى من رتبة الشخص اللي تحاول تحظره',
             sampleMembers: sample
         });
     } catch (error) {
